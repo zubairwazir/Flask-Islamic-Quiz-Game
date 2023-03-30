@@ -9,7 +9,6 @@ with open('data.csv', 'r') as file:
     reader = csv.DictReader(file)
     for row in reader:
         quiz_data.append(row)
-print(quiz_data)
 
 
 @app.route('/')

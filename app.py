@@ -1,16 +1,35 @@
-# This is a sample Python script.
+from flask import Flask, render_template, request
+import random
+import csv
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+app = Flask(__name__)
+
+quiz_data = []
+with open('data.csv', 'r') as file:
+    reader = csv.DictReader(file)
+    for row in reader:
+        quiz_data.append(row)
+print(quiz_data)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+@app.route('/')
+@app.route('/quiz')
+def quiz():
+    question = random.choice(quiz_data)
+    return render_template('quiz.html', question=question)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+@app.route('/answer', methods=['POST'])
+def answer():
+    question = request.form['question']
+    user_answer = request.form['answer']
+    correct_answer = next((q['Answer'] for q in quiz_data if q['Question'] == question), None)
+    if user_answer.lower() == correct_answer.lower():
+        result = "Correct!"
+    else:
+        result = f"Sorry, the correct answer is {correct_answer}."
+    return render_template('answer.html', result=result)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+if __name__ == "__main__":
+    app.run(debug=True)

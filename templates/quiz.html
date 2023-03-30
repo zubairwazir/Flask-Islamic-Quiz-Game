@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Islamic Quiz Game</title>
+</head>
+<body>
+    <h1>Islamic Quiz Game</h1>
+    <p>{{ question['Question'] }}</p>
+    <form action="{{ url_for('answer') }}" method="POST">
+        <input type="hidden" name="question" value="{{ question['Question'] }}">
+        <input type="text" name="answer" placeholder="Enter your answer">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
